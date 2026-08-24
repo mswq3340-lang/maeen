@@ -3,214 +3,2684 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <title>معين — الاختبارات والتصحيح</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Supabase -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    crossorigin="anonymous">
+  </script>
+
   <style>
-    :root{font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;color:#172033;background:#f5f7fb}
-    *{box-sizing:border-box} body{margin:0} button,input{font:inherit}
-    .top{background:#fff;border-bottom:1px solid #e7eaf0;padding:14px 22px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:3}
-    .brand{font-size:22px;font-weight:800}.muted{color:#667085}.wrap{max-width:1100px;margin:0 auto;padding:24px}
-    .card{background:#fff;border:1px solid #e6e9ef;border-radius:16px;padding:20px;box-shadow:0 5px 20px #1822300a;margin-bottom:16px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
-    .btn{border:0;border-radius:10px;padding:10px 15px;cursor:pointer;background:#1f5eff;color:white;font-weight:700}
-    .btn.secondary{background:#eef2ff;color:#274690}.btn.danger{background:#fee4e2;color:#b42318}.btn:disabled{opacity:.5;cursor:not-allowed}
-    input{width:100%;padding:11px 12px;border:1px solid #d0d5dd;border-radius:10px;margin:7px 0 14px}
-    label{font-weight:700;font-size:14px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.spacer{flex:1}
-    .badge{display:inline-block;padding:4px 9px;border-radius:999px;background:#eef4ff;color:#1849a9;font-size:12px;font-weight:700}
-    .badge.green{background:#ecfdf3;color:#027a48}.badge.orange{background:#fff6ed;color:#c4320a}
-    .question{border:1px solid #e6e9ef;border-radius:12px;padding:14px;margin:12px 0}.answers{display:flex;gap:8px;flex-wrap:wrap}
-    .answer{border:1px solid #d0d5dd;background:#fff;padding:9px 13px;border-radius:9px;cursor:pointer}
-    .answer.active{background:#e0eaff;border-color:#5b8def;color:#123b8d;font-weight:800}
-    table{width:100%;border-collapse:collapse}th,td{padding:11px;border-bottom:1px solid #eaecf0;text-align:right}
-    .empty{padding:30px;text-align:center;color:#667085}.error{background:#fef3f2;color:#b42318;border:1px solid #fecdca;padding:10px;border-radius:10px;margin-bottom:12px}
-    .success{background:#ecfdf3;color:#027a48;border:1px solid #abefc6;padding:10px;border-radius:10px;margin-bottom:12px}
-    .hidden{display:none!important}.small{font-size:13px}
+    :root{
+      font-family:
+        system-ui,
+        -apple-system,
+        "Segoe UI",
+        Tahoma,
+        Arial,
+        sans-serif;
+
+      color:#172033;
+      background:#f5f7fb;
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    html,
+    body{
+      margin:0;
+      padding:0;
+      min-height:100%;
+    }
+
+    body{
+      background:#f5f7fb;
+    }
+
+    button,
+    input{
+      font:inherit;
+    }
+
+    button{
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .top{
+      background:#fff;
+      border-bottom:1px solid #e7eaf0;
+      padding:14px 22px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      position:sticky;
+      top:0;
+      z-index:10;
+    }
+
+    .brand{
+      font-size:22px;
+      font-weight:800;
+    }
+
+    .muted{
+      color:#667085;
+    }
+
+    .wrap{
+      width:100%;
+      max-width:1100px;
+      margin:0 auto;
+      padding:24px;
+    }
+
+    .card{
+      background:#fff;
+      border:1px solid #e6e9ef;
+      border-radius:16px;
+      padding:20px;
+      box-shadow:0 5px 20px rgba(24,34,48,.04);
+      margin-bottom:16px;
+    }
+
+    .setup-card{
+      max-width:700px;
+      margin:40px auto;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:
+        repeat(auto-fit,minmax(280px,1fr));
+      gap:16px;
+    }
+
+    .btn{
+      border:0;
+      border-radius:10px;
+      padding:11px 16px;
+      cursor:pointer;
+      background:#1f5eff;
+      color:#fff;
+      font-weight:700;
+      transition:.15s;
+    }
+
+    .btn:hover{
+      filter:brightness(.96);
+    }
+
+    .btn:active{
+      transform:scale(.98);
+    }
+
+    .btn.secondary{
+      background:#eef2ff;
+      color:#274690;
+    }
+
+    .btn.danger{
+      background:#fee4e2;
+      color:#b42318;
+    }
+
+    .btn:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+
+    input{
+      width:100%;
+      padding:12px;
+      border:1px solid #d0d5dd;
+      border-radius:10px;
+      margin:7px 0 14px;
+      outline:none;
+      background:#fff;
+    }
+
+    input:focus{
+      border-color:#5b8def;
+      box-shadow:0 0 0 3px rgba(91,141,239,.12);
+    }
+
+    label{
+      display:block;
+      font-weight:700;
+      font-size:14px;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .spacer{
+      flex:1;
+    }
+
+    .badge{
+      display:inline-block;
+      padding:4px 9px;
+      border-radius:999px;
+      background:#eef4ff;
+      color:#1849a9;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .badge.green{
+      background:#ecfdf3;
+      color:#027a48;
+    }
+
+    .badge.orange{
+      background:#fff6ed;
+      color:#c4320a;
+    }
+
+    .question{
+      border:1px solid #e6e9ef;
+      border-radius:12px;
+      padding:14px;
+      margin:12px 0;
+    }
+
+    .answers{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    .answer{
+      border:1px solid #d0d5dd;
+      background:#fff;
+      padding:9px 13px;
+      border-radius:9px;
+      cursor:pointer;
+      min-width:55px;
+    }
+
+    .answer.active{
+      background:#e0eaff;
+      border-color:#5b8def;
+      color:#123b8d;
+      font-weight:800;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+    }
+
+    th,
+    td{
+      padding:11px;
+      border-bottom:1px solid #eaecf0;
+      text-align:right;
+    }
+
+    .empty{
+      padding:30px;
+      text-align:center;
+      color:#667085;
+    }
+
+    .error{
+      background:#fef3f2;
+      color:#b42318;
+      border:1px solid #fecdca;
+      padding:11px;
+      border-radius:10px;
+      margin-bottom:12px;
+      line-height:1.7;
+    }
+
+    .success{
+      background:#ecfdf3;
+      color:#027a48;
+      border:1px solid #abefc6;
+      padding:11px;
+      border-radius:10px;
+      margin-bottom:12px;
+      line-height:1.7;
+    }
+
+    .info{
+      background:#eff8ff;
+      color:#175cd3;
+      border:1px solid #b2ddff;
+      padding:11px;
+      border-radius:10px;
+      margin-bottom:12px;
+      line-height:1.7;
+    }
+
+    .hidden{
+      display:none !important;
+    }
+
+    .small{
+      font-size:13px;
+    }
+
+    .loading{
+      opacity:.7;
+      pointer-events:none;
+    }
+
+    @media(max-width:600px){
+      .top{
+        padding:12px 15px;
+      }
+
+      .wrap{
+        padding:14px;
+      }
+
+      .card{
+        padding:15px;
+      }
+
+      .setup-card{
+        margin:20px auto;
+      }
+
+      table{
+        font-size:13px;
+      }
+
+      th,
+      td{
+        padding:8px 5px;
+      }
+    }
   </style>
 </head>
+
 <body>
+
 <header class="top">
-  <div class="brand">معين</div>
-  <div class="row">
-    <span id="userLabel" class="muted small"></span>
-    <button id="logoutBtn" class="btn secondary hidden">تسجيل الخروج</button>
+
+  <div class="brand">
+    معين
   </div>
+
+  <div class="row">
+
+    <span
+      id="userLabel"
+      class="muted small">
+    </span>
+
+    <button
+      id="logoutBtn"
+      class="btn secondary hidden"
+      type="button">
+      تسجيل الخروج
+    </button>
+
+  </div>
+
 </header>
 
+
 <main class="wrap">
-  <section id="setup" class="card">
-    <h2>إعداد الاتصال بـ Supabase</h2>
-    <p class="muted">ضع رابط مشروع Supabase ومفتاح anon/public. لا تضع service_role هنا.</p>
-    <label>Supabase URL</label>
-    <input id="sbUrl" placeholder="https://xxxxx.supabase.co">
-    <label>Anon / Publishable Key</label>
-    <input id="sbKey" type="password" placeholder="eyJ...">
-    <button id="connectBtn" class="btn" type="button">اتصال وتشغيل معين</button>
-    <div id="setupMsg" style="margin-top:12px"></div>
-    <p class="muted small">يتم حفظ القيم محليًا في هذا المتصفح فقط.</p>
+
+  <!-- =========================
+       إعداد Supabase
+       ========================= -->
+
+  <section
+    id="setup"
+    class="card setup-card">
+
+    <h2>
+      إعداد الاتصال بـ Supabase
+    </h2>
+
+    <p class="muted">
+      ضع رابط مشروع Supabase ومفتاح Publishable/anon.
+      لا تضع service_role هنا.
+    </p>
+
+    <div id="libraryStatus"></div>
+
+    <label for="sbUrl">
+      Supabase URL
+    </label>
+
+    <input
+      id="sbUrl"
+      type="url"
+      dir="ltr"
+      autocomplete="url"
+      placeholder="https://xxxxx.supabase.co">
+
+
+    <label for="sbKey">
+      Anon / Publishable Key
+    </label>
+
+    <input
+      id="sbKey"
+      type="password"
+      dir="ltr"
+      autocomplete="off"
+      placeholder="eyJ...">
+
+
+    <button
+      id="connectBtn"
+      class="btn"
+      type="button">
+
+      اتصال وتشغيل معين
+
+    </button>
+
+
+    <div
+      id="setupMsg"
+      style="margin-top:12px">
+    </div>
+
+
+    <p class="muted small">
+      يتم حفظ القيم محليًا في هذا المتصفح فقط.
+    </p>
+
   </section>
 
-  <section id="login" class="card hidden">
-    <h2>تسجيل الدخول</h2>
+
+  <!-- =========================
+       تسجيل الدخول
+       ========================= -->
+
+  <section
+    id="login"
+    class="card setup-card hidden">
+
+    <h2>
+      تسجيل الدخول
+    </h2>
+
     <div id="loginMsg"></div>
-    <label>البريد الإلكتروني</label>
-    <input id="email" type="email" autocomplete="username">
-    <label>كلمة المرور</label>
-    <input id="password" type="password" autocomplete="current-password">
-    <button id="loginBtn" class="btn">دخول</button>
+
+    <label for="email">
+      البريد الإلكتروني
+    </label>
+
+    <input
+      id="email"
+      type="email"
+      autocomplete="username"
+      dir="ltr"
+      placeholder="name@example.com">
+
+
+    <label for="password">
+      كلمة المرور
+    </label>
+
+    <input
+      id="password"
+      type="password"
+      autocomplete="current-password"
+      dir="ltr">
+
+
+    <button
+      id="loginBtn"
+      class="btn"
+      type="button">
+
+      دخول
+
+    </button>
+
   </section>
 
-  <section id="app" class="hidden">
+
+  <!-- =========================
+       التطبيق
+       ========================= -->
+
+  <section
+    id="app"
+    class="hidden">
+
     <div id="appMsg"></div>
-    <div id="studentView" class="hidden"></div>
-    <div id="teacherView" class="hidden"></div>
+
+    <div
+      id="studentView"
+      class="hidden">
+    </div>
+
+    <div
+      id="teacherView"
+      class="hidden">
+    </div>
+
   </section>
+
 </main>
 
-<script>
-let supabase = null;
-let currentUser = null;
-const $ = id => document.getElementById(id);
-const esc = s => String(s ?? '').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-const msg = (text, ok=false) => `<div class="${ok?'success':'error'}">${esc(text)}</div>`;
 
-function show(id, yes=true){ $(id).classList.toggle('hidden', !yes); }
+<script>
+"use strict";
+
+
+/* =========================================================
+   المتغيرات الأساسية
+   ========================================================= */
+
+let supabaseClient = null;
+let currentUser = null;
+let currentProfile = null;
+
+
+/* =========================================================
+   أدوات مساعدة
+   ========================================================= */
+
+const $ = (id) => {
+  return document.getElementById(id);
+};
+
+
+const esc = (value) => {
+
+  return String(value ?? "")
+    .replace(/[&<>"']/g, (char) => {
+
+      const map = {
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+      };
+
+      return map[char];
+
+    });
+
+};
+
+
+const msg = (text, ok=false) => {
+
+  return `
+    <div class="${ok ? "success" : "error"}">
+      ${esc(text)}
+    </div>
+  `;
+
+};
+
+
+const info = (text) => {
+
+  return `
+    <div class="info">
+      ${esc(text)}
+    </div>
+  `;
+
+};
+
+
+function show(id, yes=true){
+
+  const element = $(id);
+
+  if(!element){
+    return;
+  }
+
+  element.classList.toggle("hidden", !yes);
+}
+
+
+function setButtonLoading(button, loading, text){
+
+  if(!button){
+    return;
+  }
+
+  if(loading){
+
+    button.dataset.originalText =
+      button.textContent;
+
+    button.textContent =
+      text || "جارٍ التنفيذ...";
+
+    button.disabled = true;
+
+    button.classList.add("loading");
+
+  }else{
+
+    button.textContent =
+      button.dataset.originalText ||
+      button.textContent;
+
+    button.disabled = false;
+
+    button.classList.remove("loading");
+
+  }
+
+}
+
+
+/* =========================================================
+   التحقق من مكتبة Supabase
+   ========================================================= */
+
+function supabaseLibraryReady(){
+
+  return !!(
+    window.supabase &&
+    typeof window.supabase.createClient === "function"
+  );
+
+}
+
+
+function showLibraryStatus(){
+
+  const box = $("libraryStatus");
+
+  if(!box){
+    return;
+  }
+
+  if(supabaseLibraryReady()){
+
+    box.innerHTML =
+      info("مكتبة Supabase تم تحميلها بنجاح.");
+
+  }else{
+
+    box.innerHTML =
+      msg(
+        "لم يتم تحميل مكتبة Supabase. تأكد من الإنترنت ثم أعد تحميل الصفحة."
+      );
+
+  }
+
+}
+
+
+/* =========================================================
+   تنظيف رابط Supabase
+   ========================================================= */
+
+function normalizeSupabaseUrl(value){
+
+  let url = String(value || "").trim();
+
+  /*
+    إزالة المسافات
+  */
+  url = url.replace(/\s+/g, "");
+
+  /*
+    إذا كتب المستخدم الرابط بدون https
+  */
+  if(
+    url &&
+    !url.startsWith("http://") &&
+    !url.startsWith("https://")
+  ){
+
+    url = "https://" + url;
+
+  }
+
+  /*
+    إزالة / الأخيرة
+  */
+  url = url.replace(/\/+$/, "");
+
+  return url;
+
+}
+
+
+/* =========================================================
+   التحقق من الرابط
+   ========================================================= */
+
+function validateSupabaseUrl(url){
+
+  try{
+
+    const parsed = new URL(url);
+
+    if(
+      parsed.protocol !== "https:" &&
+      parsed.protocol !== "http:"
+    ){
+
+      return false;
+
+    }
+
+    /*
+      نسمح أيضًا بالنطاقات المخصصة.
+      لذلك لا نفرض .supabase.co فقط.
+    */
+
+    return !!parsed.hostname;
+
+  }catch{
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================================================
+   إنشاء عميل Supabase
+   ========================================================= */
+
+function createSupabaseClient(url, key){
+
+  if(!supabaseLibraryReady()){
+
+    throw new Error(
+      "مكتبة Supabase غير محملة في الصفحة."
+    );
+
+  }
+
+  return window.supabase.createClient(
+    url,
+    key,
+    {
+      auth:{
+        autoRefreshToken:true,
+        persistSession:true,
+        detectSessionInUrl:true
+      }
+    }
+  );
+
+}
+
+
+/* =========================================================
+   الاتصال بـ Supabase
+   ========================================================= */
 
 async function connect(){
-  const setupMsg=$('setupMsg');
-  setupMsg.innerHTML='';
-  const url=$('sbUrl').value.trim(), key=$('sbKey').value.trim();
-  if(!url||!key){ setupMsg.innerHTML=msg('أدخل رابط Supabase والمفتاح أولًا.'); return; }
-  if(!/^https:\/\/[^\s]+\.supabase\.co(?:\/)?$/.test(url)){
-    setupMsg.innerHTML=msg('رابط Supabase غير صحيح. استخدم رابط المشروع فقط، بدون /rest/v1.'); return;
+
+  const setupMsg = $("setupMsg");
+  const connectBtn = $("connectBtn");
+
+  setupMsg.innerHTML = "";
+
+  /*
+    رسالة اختبار مباشرة عند الضغط
+  */
+  setupMsg.innerHTML =
+    info("تم الضغط على الزر، جارٍ اختبار الاتصال...");
+
+
+  const rawUrl =
+    $("sbUrl").value;
+
+  const key =
+    $("sbKey").value.trim();
+
+
+  const url =
+    normalizeSupabaseUrl(rawUrl);
+
+
+  /*
+    تحقق من البيانات
+  */
+
+  if(!url){
+
+    setupMsg.innerHTML =
+      msg("أدخل رابط Supabase أولًا.");
+
+    return;
+
   }
-  if(!window.supabase || !window.supabase.createClient){
-    setupMsg.innerHTML=msg('لم يتم تحميل مكتبة Supabase. تأكد من اتصال الإنترنت ثم أعد تحميل الصفحة.'); return;
+
+
+  if(!key){
+
+    setupMsg.innerHTML =
+      msg("أدخل مفتاح Publishable/anon أولًا.");
+
+    return;
+
   }
+
+
+  if(!validateSupabaseUrl(url)){
+
+    setupMsg.innerHTML =
+      msg(
+        "رابط Supabase غير صحيح. مثال: https://xxxxx.supabase.co"
+      );
+
+    return;
+
+  }
+
+
+  if(
+    key.toLowerCase().includes("service_role")
+  ){
+
+    setupMsg.innerHTML =
+      msg(
+        "لا تستخدم service_role داخل الموقع. استخدم Publishable/anon key فقط."
+      );
+
+    return;
+
+  }
+
+
+  setButtonLoading(
+    connectBtn,
+    true,
+    "جارٍ الاتصال..."
+  );
+
+
   try{
-    localStorage.setItem('maeen_sb_url',url); localStorage.setItem('maeen_sb_key',key);
-    supabase=window.supabase.createClient(url,key);
-    setupMsg.innerHTML=msg('تم الاتصال بالمشروع، جارٍ التحقق... ',true);
-    const {data:{session},error}=await supabase.auth.getSession();
-    if(error) throw error;
-    show('setup',false); show('login',true);
-    if(session) await startApp(session.user);
-  }catch(e){
-    setupMsg.innerHTML=msg('فشل الاتصال: '+(e?.message||e));
+
+    /*
+      إنشاء العميل
+    */
+
+    const client =
+      createSupabaseClient(
+        url,
+        key
+      );
+
+
+    /*
+      اختبار Auth
+    */
+
+    const {
+      data,
+      error
+    } =
+      await client.auth.getSession();
+
+
+    if(error){
+      throw error;
+    }
+
+
+    /*
+      حفظ الإعدادات
+    */
+
+    localStorage.setItem(
+      "maeen_sb_url",
+      url
+    );
+
+    localStorage.setItem(
+      "maeen_sb_key",
+      key
+    );
+
+
+    supabaseClient =
+      client;
+
+
+    setupMsg.innerHTML =
+      msg(
+        "تم الاتصال بـ Supabase بنجاح.",
+        true
+      );
+
+
+    /*
+      إخفاء شاشة الإعداد
+    */
+
+    show(
+      "setup",
+      false
+    );
+
+
+    /*
+      إذا كان هناك تسجيل دخول سابق
+    */
+
+    if(data && data.session){
+
+      await startApp(
+        data.session.user
+      );
+
+    }else{
+
+      show(
+        "login",
+        true
+      );
+
+      $("loginMsg").innerHTML =
+        msg(
+          "الاتصال ناجح. سجّل الدخول للمتابعة.",
+          true
+        );
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "Supabase connection error:",
+      error
+    );
+
+
+    setupMsg.innerHTML =
+      msg(
+        "فشل الاتصال: " +
+        (
+          error?.message ||
+          error?.error_description ||
+          String(error)
+        )
+      );
+
+  }finally{
+
+    setButtonLoading(
+      connectBtn,
+      false
+    );
+
   }
+
 }
+
+
+/* =========================================================
+   تشغيل التطبيق
+   ========================================================= */
+
 async function startApp(user){
-  currentUser=user; show('login',false); show('app',true); show('logoutBtn',true);
-  $('userLabel').textContent=user.email||'';
-  const {data:profile,error}=await supabase.from('profiles').select('id,full_name,role').eq('id',user.id).single();
-  if(error) return $('appMsg').innerHTML=msg('تعذر قراءة ملف المستخدم: '+error.message);
-  $('userLabel').textContent=`${profile.full_name} — ${profile.role}`;
-  if(profile.role==='teacher' || profile.role==='admin') return loadTeacher();
-  if(profile.role==='student') return loadStudent();
-  $('appMsg').innerHTML=msg('الدور الحالي غير مدعوم في هذه النسخة.');
+
+  currentUser =
+    user;
+
+
+  show(
+    "login",
+    false
+  );
+
+  show(
+    "setup",
+    false
+  );
+
+  show(
+    "app",
+    true
+  );
+
+  show(
+    "logoutBtn",
+    true
+  );
+
+
+  $("userLabel").textContent =
+    user?.email || "";
+
+
+  $("appMsg").innerHTML =
+    info("جارٍ تحميل حسابك...");
+
+
+  /*
+    قراءة ملف المستخدم
+  */
+
+  const {
+    data: profile,
+    error
+  } =
+    await supabaseClient
+      .from("profiles")
+      .select(
+        "id,full_name,role"
+      )
+      .eq(
+        "id",
+        user.id
+      )
+      .maybeSingle();
+
+
+  if(error){
+
+    $("appMsg").innerHTML =
+      msg(
+        "تعذر قراءة ملف المستخدم: " +
+        error.message
+      );
+
+    return;
+
+  }
+
+
+  if(!profile){
+
+    $("appMsg").innerHTML =
+      msg(
+        "تم تسجيل الدخول، لكن لا يوجد سجل لهذا المستخدم في جدول profiles."
+      );
+
+    return;
+
+  }
+
+
+  currentProfile =
+    profile;
+
+
+  $("userLabel").textContent =
+    `${profile.full_name || user.email || ""} — ${profile.role || ""}`;
+
+
+  $("appMsg").innerHTML =
+    "";
+
+
+  /*
+    تحديد نوع الحساب
+  */
+
+  if(
+    profile.role === "teacher" ||
+    profile.role === "admin"
+  ){
+
+    await loadTeacher();
+
+    return;
+
+  }
+
+
+  if(
+    profile.role === "student"
+  ){
+
+    await loadStudent();
+
+    return;
+
+  }
+
+
+  $("appMsg").innerHTML =
+    msg(
+      "الدور الحالي غير مدعوم: " +
+      (profile.role || "غير محدد")
+    );
+
 }
+
+
+/* =========================================================
+   واجهة الطالب
+   ========================================================= */
 
 async function loadStudent(){
-  show('teacherView',false); show('studentView',true);
-  $('studentView').innerHTML=`<div class="card"><h2>اختبارات الطالب</h2><div id="studentContent">جارٍ التحميل...</div></div>`;
-  const {data:classes,error:ce}=await supabase.from('class_students').select('class_id').eq('student_id',currentUser.id);
-  if(ce) return $('studentContent').innerHTML=msg(ce.message);
-  const ids=(classes||[]).map(x=>x.class_id);
-  if(!ids.length) return $('studentContent').innerHTML=`<div class="empty">لا توجد صفوف مسجل بها الطالب.</div>`;
-  const {data:exams,error}=await supabase.from('exams').select('id,title,total_score,duration_minutes,starts_at,ends_at,class_id,teacher_id').in('class_id',ids).order('starts_at',{ascending:true});
-  if(error) return $('studentContent').innerHTML=msg(error.message);
-  const {data:results}=await supabase.from('exam_results').select('id,exam_id,score,status,created_at').eq('student_id',currentUser.id);
-  const rmap=new Map((results||[]).map(r=>[r.exam_id,r]));
-  $('studentContent').innerHTML=(exams||[]).map(e=>{
-    const r=rmap.get(e.id);
-    return `<div class="card">
-      <div class="row"><h3>${esc(e.title)}</h3><span class="spacer"></span>
-      ${r?`<span class="badge green">${esc(r.status)} — ${r.score==null?'بدون درجة':r.score+'/'+(e.total_score??'')}</span>`:`<span class="badge">غير مسلّم</span>`}</div>
-      <p class="muted small">البداية: ${esc(e.starts_at||'—')} | النهاية: ${esc(e.ends_at||'—')}</p>
-      ${r?`<button class="btn secondary" onclick="viewStudentResult('${e.id}')">عرض النتيجة</button>`:`<button class="btn" onclick="takeExam('${e.id}')">بدء الاختبار</button>`}
-    </div>`;
-  }).join('') || `<div class="empty">لا توجد اختبارات.</div>`;
+
+  show(
+    "teacherView",
+    false
+  );
+
+  show(
+    "studentView",
+    true
+  );
+
+
+  $("studentView").innerHTML = `
+
+    <div class="card">
+
+      <div class="row">
+
+        <h2>
+          اختبارات الطالب
+        </h2>
+
+        <span class="spacer"></span>
+
+        <span class="badge green">
+          طالب
+        </span>
+
+      </div>
+
+      <div id="studentContent">
+        جارٍ التحميل...
+      </div>
+
+    </div>
+
+  `;
+
+
+  const {
+    data: classes,
+    error: classesError
+  } =
+    await supabaseClient
+      .from("class_students")
+      .select("class_id")
+      .eq(
+        "student_id",
+        currentUser.id
+      );
+
+
+  if(classesError){
+
+    $("studentContent").innerHTML =
+      msg(
+        classesError.message
+      );
+
+    return;
+
+  }
+
+
+  const classIds =
+    (classes || [])
+      .map(
+        item => item.class_id
+      )
+      .filter(Boolean);
+
+
+  if(!classIds.length){
+
+    $("studentContent").innerHTML =
+      `
+        <div class="empty">
+          لا توجد صفوف مسجل بها الطالب.
+        </div>
+      `;
+
+    return;
+
+  }
+
+
+  const {
+    data: exams,
+    error: examsError
+  } =
+    await supabaseClient
+      .from("exams")
+      .select(
+        "id,title,total_score,duration_minutes,starts_at,ends_at,class_id,teacher_id"
+      )
+      .in(
+        "class_id",
+        classIds
+      )
+      .order(
+        "starts_at",
+        {
+          ascending:true,
+          nullsFirst:false
+        }
+      );
+
+
+  if(examsError){
+
+    $("studentContent").innerHTML =
+      msg(
+        examsError.message
+      );
+
+    return;
+
+  }
+
+
+  const {
+    data: results,
+    error: resultsError
+  } =
+    await supabaseClient
+      .from("exam_results")
+      .select(
+        "id,exam_id,score,status,created_at"
+      )
+      .eq(
+        "student_id",
+        currentUser.id
+      );
+
+
+  if(resultsError){
+
+    $("studentContent").innerHTML =
+      msg(
+        resultsError.message
+      );
+
+    return;
+
+  }
+
+
+  const resultMap =
+    new Map(
+      (results || [])
+        .map(
+          result =>
+            [
+              result.exam_id,
+              result
+            ]
+        )
+    );
+
+
+  if(!(exams || []).length){
+
+    $("studentContent").innerHTML =
+      `
+        <div class="empty">
+          لا توجد اختبارات حاليًا.
+        </div>
+      `;
+
+    return;
+
+  }
+
+
+  $("studentContent").innerHTML =
+    (exams || [])
+      .map(
+        exam => {
+
+          const result =
+            resultMap.get(
+              exam.id
+            );
+
+
+          return `
+
+            <div class="card">
+
+              <div class="row">
+
+                <h3>
+                  ${esc(exam.title)}
+                </h3>
+
+                <span class="spacer"></span>
+
+                ${
+                  result
+
+                  ?
+
+                  `
+                    <span class="badge green">
+                      ${esc(result.status || "تم التسليم")}
+                      —
+                      ${
+                        result.score == null
+                        ? "بدون درجة"
+                        : `${esc(result.score)}/${esc(exam.total_score ?? "")}`
+                      }
+                    </span>
+                  `
+
+                  :
+
+                  `
+                    <span class="badge">
+                      غير مسلّم
+                    </span>
+                  `
+                }
+
+              </div>
+
+
+              <p class="muted small">
+
+                البداية:
+                ${esc(exam.starts_at || "—")}
+
+                |
+
+                النهاية:
+                ${esc(exam.ends_at || "—")}
+
+              </p>
+
+
+              ${
+                result
+
+                ?
+
+                `
+                  <button
+                    class="btn secondary"
+                    type="button"
+                    onclick="viewStudentResult('${esc(exam.id)}')">
+
+                    عرض النتيجة
+
+                  </button>
+                `
+
+                :
+
+                `
+                  <button
+                    class="btn"
+                    type="button"
+                    onclick="takeExam('${esc(exam.id)}')">
+
+                    بدء الاختبار
+
+                  </button>
+                `
+              }
+
+            </div>
+
+          `;
+
+        }
+      )
+      .join("");
+
 }
+
+
+/* =========================================================
+   بدء الاختبار
+   ========================================================= */
 
 async function takeExam(examId){
-  const {data:e,error}=await supabase.from('exams').select('id,title,total_score,starts_at,ends_at').eq('id',examId).single();
-  if(error) return $('studentView').innerHTML=msg(error.message);
-  // The answer key is intentionally never requested here; RLS protects it.
-  $('studentView').innerHTML=`<div class="card"><div class="row"><button class="btn secondary" onclick="loadStudent()">رجوع</button><span class="spacer"></span><h2>${esc(e.title)}</h2></div>
-  <p class="muted">أدخل الإجابات ثم اضغط تسليم. التصحيح يتم تلقائيًا إذا كان مفتاح الإجابة متاحًا.</p>
-  <div id="examQuestions">
-    ${['q1','q2','q3'].map((q,i)=>`<div class="question"><b>السؤال ${i+1} (${q})</b><div class="answers" data-q="${q}">
-      ${['A','B','C','D'].map(a=>`<button class="answer" onclick="pickAnswer(this,'${q}','${a}')">${a}</button>`).join('')}
-    </div></div>`).join('')}
-  </div>
-  <button class="btn" onclick="submitCurrentExam('${e.id}')">تسليم الاختبار</button>
-  </div>`;
+
+  const {
+    data: exam,
+    error
+  } =
+    await supabaseClient
+      .from("exams")
+      .select(
+        "id,title,total_score,duration_minutes,starts_at,ends_at"
+      )
+      .eq(
+        "id",
+        examId
+      )
+      .single();
+
+
+  if(error){
+
+    $("studentView").innerHTML =
+      msg(
+        error.message
+      );
+
+    return;
+
+  }
+
+
+  /*
+    ملاحظة مهمة:
+    هذا الكود يعتمد على q1/q2/q3 الموجودة في النظام الحالي.
+    إذا كانت الأسئلة محفوظة في جدول منفصل، نحتاج معرفة اسم الجدول
+    وبنيته لإظهار الأسئلة الحقيقية.
+  */
+
+  const questions = [
+    {
+      id:"q1",
+      number:1
+    },
+    {
+      id:"q2",
+      number:2
+    },
+    {
+      id:"q3",
+      number:3
+    }
+  ];
+
+
+  $("studentView").innerHTML = `
+
+    <div class="card">
+
+      <div class="row">
+
+        <button
+          class="btn secondary"
+          type="button"
+          onclick="loadStudent()">
+
+          رجوع
+
+        </button>
+
+        <span class="spacer"></span>
+
+        <h2>
+          ${esc(exam.title)}
+        </h2>
+
+      </div>
+
+
+      <div class="info">
+
+        ${
+          exam.duration_minutes
+          ? `مدة الاختبار: ${esc(exam.duration_minutes)} دقيقة`
+          : "لا توجد مدة محددة"
+        }
+
+      </div>
+
+
+      <div id="examQuestions">
+
+        ${
+          questions
+            .map(
+              question => `
+
+                <div class="question">
+
+                  <b>
+                    السؤال ${question.number}
+                  </b>
+
+                  <div class="answers"
+                       data-q="${question.id}">
+
+                    ${
+                      ["A","B","C","D"]
+                        .map(
+                          answer => `
+
+                            <button
+                              class="answer"
+                              type="button"
+                              onclick="pickAnswer(this,'${question.id}','${answer}')">
+
+                              ${answer}
+
+                            </button>
+
+                          `
+                        )
+                        .join("")
+                    }
+
+                  </div>
+
+                </div>
+
+              `
+            )
+            .join("")
+        }
+
+      </div>
+
+
+      <button
+        class="btn"
+        type="button"
+        onclick="submitCurrentExam('${esc(exam.id)}')">
+
+        تسليم الاختبار
+
+      </button>
+
+    </div>
+
+  `;
+
 }
-function pickAnswer(btn,q,a){
-  document.querySelectorAll(`[data-q="${q}"] .answer`).forEach(x=>x.classList.remove('active')); btn.classList.add('active');
+
+
+/* =========================================================
+   اختيار إجابة
+   ========================================================= */
+
+function pickAnswer(button, questionId, answer){
+
+  document
+    .querySelectorAll(
+      `[data-q="${questionId}"] .answer`
+    )
+    .forEach(
+      item =>
+        item.classList.remove(
+          "active"
+        )
+    );
+
+
+  button.classList.add(
+    "active"
+  );
+
 }
+
+
+/* =========================================================
+   تسليم الاختبار
+   ========================================================= */
+
 async function submitCurrentExam(examId){
-  const answers={};
-  document.querySelectorAll('.answers').forEach(box=>{const b=box.querySelector('.answer.active'); if(b) answers[box.dataset.q]=b.textContent;});
-  const {data,error}=await supabase.rpc('submit_exam',{p_exam_id:examId,p_answers:answers});
-  if(error) return alert(error.message);
-  await loadStudent();
-  alert('تم تسليم الاختبار بنجاح.');
+
+  const answers = {};
+
+
+  document
+    .querySelectorAll(".answers")
+    .forEach(
+      box => {
+
+        const selected =
+          box.querySelector(
+            ".answer.active"
+          );
+
+
+        if(selected){
+
+          answers[
+            box.dataset.q
+          ] =
+            selected.textContent.trim();
+
+        }
+
+      }
+    );
+
+
+  if(
+    Object.keys(answers).length === 0
+  ){
+
+    alert(
+      "اختر إجابة واحدة على الأقل قبل التسليم."
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .rpc(
+          "submit_exam",
+          {
+            p_exam_id:examId,
+            p_answers:answers
+          }
+        );
+
+
+    if(error){
+
+      alert(
+        "تعذر تسليم الاختبار:\n" +
+        error.message
+      );
+
+      return;
+
+    }
+
+
+    alert(
+      "تم تسليم الاختبار بنجاح."
+    );
+
+
+    await loadStudent();
+
+
+  }catch(error){
+
+    alert(
+      "حدث خطأ أثناء التسليم:\n" +
+      (
+        error?.message ||
+        String(error)
+      )
+    );
+
+  }
+
 }
+
+
+/* =========================================================
+   نتيجة الطالب
+   ========================================================= */
+
 async function viewStudentResult(examId){
-  const {data:r}=await supabase.from('exam_results').select('score,status,automatic_score,created_at').eq('exam_id',examId).eq('student_id',currentUser.id).single();
-  const {data:e}=await supabase.from('exams').select('title,total_score').eq('id',examId).single();
-  if(!r||!e) return;
-  $('studentView').innerHTML=`<div class="card"><button class="btn secondary" onclick="loadStudent()">رجوع</button><h2>${esc(e.title)}</h2><div class="card"><h1>${esc(r.score??'—')} / ${esc(e.total_score??'—')}</h1><span class="badge green">${esc(r.status)}</span><p class="muted">تصحيح تلقائي: ${r.automatic_score?'نعم':'لا'}</p></div></div>`;
+
+  const {
+    data: result,
+    error: resultError
+  } =
+    await supabaseClient
+      .from("exam_results")
+      .select(
+        "score,status,automatic_score,created_at"
+      )
+      .eq(
+        "exam_id",
+        examId
+      )
+      .eq(
+        "student_id",
+        currentUser.id
+      )
+      .maybeSingle();
+
+
+  if(resultError){
+
+    $("studentView").innerHTML =
+      msg(
+        resultError.message
+      );
+
+    return;
+
+  }
+
+
+  const {
+    data: exam,
+    error: examError
+  } =
+    await supabaseClient
+      .from("exams")
+      .select(
+        "title,total_score"
+      )
+      .eq(
+        "id",
+        examId
+      )
+      .single();
+
+
+  if(examError){
+
+    $("studentView").innerHTML =
+      msg(
+        examError.message
+      );
+
+    return;
+
+  }
+
+
+  if(!result){
+
+    $("studentView").innerHTML =
+      msg(
+        "لم يتم العثور على نتيجة لهذا الاختبار."
+      );
+
+    return;
+
+  }
+
+
+  $("studentView").innerHTML = `
+
+    <div class="card">
+
+      <button
+        class="btn secondary"
+        type="button"
+        onclick="loadStudent()">
+
+        رجوع
+
+      </button>
+
+
+      <h2>
+        ${esc(exam.title)}
+      </h2>
+
+
+      <div class="card">
+
+        <h1>
+          ${esc(result.score ?? "—")}
+          /
+          ${esc(exam.total_score ?? "—")}
+        </h1>
+
+
+        <span class="badge green">
+          ${esc(result.status || "—")}
+        </span>
+
+
+        <p class="muted">
+
+          تصحيح تلقائي:
+          ${
+            result.automatic_score
+            ? "نعم"
+            : "لا"
+          }
+
+        </p>
+
+      </div>
+
+    </div>
+
+  `;
+
 }
+
+
+/* =========================================================
+   واجهة المعلم
+   ========================================================= */
 
 async function loadTeacher(){
-  show('studentView',false); show('teacherView',true);
-  $('teacherView').innerHTML=`<div class="card"><h2>لوحة المعلم</h2><div id="teacherContent">جارٍ التحميل...</div></div>`;
-  const {data:exams,error}=await supabase.from('exams').select('id,title,total_score,class_id,starts_at,ends_at').eq('teacher_id',currentUser.id).order('created_at',{ascending:false});
-  if(error) return $('teacherContent').innerHTML=msg(error.message);
-  $('teacherContent').innerHTML=(exams||[]).map(e=>`<div class="card"><div class="row"><h3>${esc(e.title)}</h3><span class="spacer"></span><span class="badge">${esc(e.total_score??'')}</span></div><p class="muted small">البداية: ${esc(e.starts_at||'—')} | النهاية: ${esc(e.ends_at||'—')}</p><button class="btn" onclick="teacherResults('${e.id}')">النتائج والتصحيح</button></div>`).join('')||`<div class="empty">لا توجد اختبارات لهذا المعلم.</div>`;
+
+  show(
+    "studentView",
+    false
+  );
+
+  show(
+    "teacherView",
+    true
+  );
+
+
+  $("teacherView").innerHTML = `
+
+    <div class="card">
+
+      <div class="row">
+
+        <h2>
+          لوحة المعلم
+        </h2>
+
+        <span class="spacer"></span>
+
+        <span class="badge green">
+          ${esc(currentProfile?.role || "معلم")}
+        </span>
+
+      </div>
+
+
+      <div id="teacherContent">
+        جارٍ التحميل...
+      </div>
+
+    </div>
+
+  `;
+
+
+  const {
+    data: exams,
+    error
+  } =
+    await supabaseClient
+      .from("exams")
+      .select(
+        "id,title,total_score,class_id,starts_at,ends_at,created_at"
+      )
+      .eq(
+        "teacher_id",
+        currentUser.id
+      )
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
+
+
+  if(error){
+
+    $("teacherContent").innerHTML =
+      msg(
+        error.message
+      );
+
+    return;
+
+  }
+
+
+  if(!(exams || []).length){
+
+    $("teacherContent").innerHTML =
+      `
+        <div class="empty">
+          لا توجد اختبارات لهذا المعلم.
+        </div>
+      `;
+
+    return;
+
+  }
+
+
+  $("teacherContent").innerHTML =
+    exams
+      .map(
+        exam => `
+
+          <div class="card">
+
+            <div class="row">
+
+              <h3>
+                ${esc(exam.title)}
+              </h3>
+
+              <span class="spacer"></span>
+
+              <span class="badge">
+                الدرجة:
+                ${esc(exam.total_score ?? "")}
+              </span>
+
+            </div>
+
+
+            <p class="muted small">
+
+              البداية:
+              ${esc(exam.starts_at || "—")}
+
+              |
+
+              النهاية:
+              ${esc(exam.ends_at || "—")}
+
+            </p>
+
+
+            <button
+              class="btn"
+              type="button"
+              onclick="teacherResults('${esc(exam.id)}')">
+
+              النتائج والتصحيح
+
+            </button>
+
+          </div>
+
+        `
+      )
+      .join("");
+
 }
+
+
+/* =========================================================
+   نتائج المعلم
+   ========================================================= */
+
 async function teacherResults(examId){
-  const {data:e,error:ee}=await supabase.from('exams').select('id,title,total_score').eq('id',examId).single();
-  if(ee) return $('teacherView').innerHTML=msg(ee.message);
-  const {data:rs,error}=await supabase.from('exam_results').select('id,student_id,answers,score,automatic_score,status,created_at').eq('exam_id',examId).order('created_at',{ascending:false});
-  if(error) return $('teacherView').innerHTML=msg(error.message);
-  const ids=(rs||[]).map(r=>r.student_id);
-  let profiles=[];
-  if(ids.length){const p=await supabase.from('profiles').select('id,full_name').in('id',ids); profiles=p.data||[];}
-  const names=new Map(profiles.map(p=>[p.id,p.full_name]));
-  $('teacherView').innerHTML=`<div class="card"><div class="row"><button class="btn secondary" onclick="loadTeacher()">رجوع</button><span class="spacer"></span><h2>${esc(e.title)} — النتائج</h2></div>
-  <div class="card"><table><thead><tr><th>الطالب</th><th>الدرجة</th><th>الحالة</th><th>الإجراء</th></tr></thead><tbody>
-  ${(rs||[]).map(r=>`<tr><td>${esc(names.get(r.student_id)||r.student_id)}</td><td>${esc(r.score??'—')} / ${esc(e.total_score??'')}</td><td>${esc(r.status)}</td><td><button class="btn" onclick="editGrade('${r.id}','${esc(names.get(r.student_id)||'الطالب')}','${r.score??''}','${e.total_score??''}')">تصحيح</button></td></tr>`).join('')||`<tr><td colspan="4" class="empty">لا توجد نتائج بعد.</td></tr>`}
-  </tbody></table></div></div>`;
-}
-async function editGrade(resultId,student,current,total){
-  const value=prompt(`الدرجة الجديدة للطالب ${student} (من ${total}):`,current);
-  if(value===null) return;
-  const score=Number(value);
-  if(!Number.isFinite(score)||score<0||score>Number(total)) return alert('درجة غير صالحة.');
-  const {error}=await supabase.from('exam_results').update({score,status:'graded'}).eq('id',resultId);
-  if(error) return alert(error.message);
-  alert('تم حفظ الدرجة.');
-  // Re-read from database; this also verifies the RLS UPDATE/SELECT path.
-  const row=await supabase.from('exam_results').select('score,status').eq('id',resultId).single();
-  if(row.error) return alert(row.error.message);
-  await teacherResults((await supabase.from('exam_results').select('exam_id').eq('id',resultId).single()).data.exam_id);
+
+  const {
+    data: exam,
+    error: examError
+  } =
+    await supabaseClient
+      .from("exams")
+      .select(
+        "id,title,total_score"
+      )
+      .eq(
+        "id",
+        examId
+      )
+      .single();
+
+
+  if(examError){
+
+    $("teacherView").innerHTML =
+      msg(
+        examError.message
+      );
+
+    return;
+
+  }
+
+
+  const {
+    data: results,
+    error: resultsError
+  } =
+    await supabaseClient
+      .from("exam_results")
+      .select(
+        "id,student_id,answers,score,automatic_score,status,created_at,exam_id"
+      )
+      .eq(
+        "exam_id",
+        examId
+      )
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
+
+
+  if(resultsError){
+
+    $("teacherView").innerHTML =
+      msg(
+        resultsError.message
+      );
+
+    return;
+
+  }
+
+
+  const studentIds =
+    (results || [])
+      .map(
+        result =>
+          result.student_id
+      )
+      .filter(Boolean);
+
+
+  let profiles = [];
+
+
+  if(studentIds.length){
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("profiles")
+        .select(
+          "id,full_name"
+        )
+        .in(
+          "id",
+          studentIds
+        );
+
+
+    if(error){
+
+      $("teacherView").innerHTML =
+        msg(
+          error.message
+        );
+
+      return;
+
+    }
+
+
+    profiles =
+      data || [];
+
+  }
+
+
+  const names =
+    new Map(
+      profiles.map(
+        profile =>
+          [
+            profile.id,
+            profile.full_name
+          ]
+      )
+    );
+
+
+  $("teacherView").innerHTML = `
+
+    <div class="card">
+
+      <div class="row">
+
+        <button
+          class="btn secondary"
+          type="button"
+          onclick="loadTeacher()">
+
+          رجوع
+
+        </button>
+
+        <span class="spacer"></span>
+
+        <h2>
+          ${esc(exam.title)}
+          — النتائج
+        </h2>
+
+      </div>
+
+
+      <div class="card">
+
+        <div style="overflow-x:auto">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  الطالب
+                </th>
+
+                <th>
+                  الدرجة
+                </th>
+
+                <th>
+                  الحالة
+                </th>
+
+                <th>
+                  الإجراء
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              ${
+                (results || [])
+                  .map(
+                    result => {
+
+                      const studentName =
+                        names.get(
+                          result.student_id
+                        ) ||
+                        result.student_id ||
+                        "الطالب";
+
+
+                      return `
+
+                        <tr>
+
+                          <td>
+                            ${esc(studentName)}
+                          </td>
+
+
+                          <td>
+
+                            ${esc(result.score ?? "—")}
+                            /
+                            ${esc(exam.total_score ?? "")}
+
+                          </td>
+
+
+                          <td>
+                            ${esc(result.status || "—")}
+                          </td>
+
+
+                          <td>
+
+                            <button
+                              class="btn"
+                              type="button"
+                              onclick="editGrade(
+                                '${esc(result.id)}',
+                                '${esc(studentName)}',
+                                '${esc(result.score ?? "")}',
+                                '${esc(exam.total_score ?? "")}'
+                              )">
+
+                              تصحيح
+
+                            </button>
+
+                          </td>
+
+                        </tr>
+
+                      `;
+
+                    }
+                  )
+                  .join("")
+
+                ||
+
+                `
+                  <tr>
+
+                    <td
+                      colspan="4"
+                      class="empty">
+
+                      لا توجد نتائج بعد.
+
+                    </td>
+
+                  </tr>
+                `
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
 }
 
-$('connectBtn').addEventListener('click',connect);
-$('loginBtn').onclick=async()=>{
-  $('loginMsg').innerHTML='';
-  const {data,error}=await supabase.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});
-  if(error) return $('loginMsg').innerHTML=msg(error.message);
-  await startApp(data.user);
-};
-$('logoutBtn').onclick=async()=>{await supabase.auth.signOut(); location.reload();};
 
-window.addEventListener('load',async()=>{
-  const u=localStorage.getItem('maeen_sb_url'), k=localStorage.getItem('maeen_sb_key');
-  if(u&&k && window.supabase?.createClient){ try { $('sbUrl').value=u; $('sbKey').value=k; supabase=window.supabase.createClient(u,k); show('setup',false); const {data:{session},error}=await supabase.auth.getSession(); if(error) throw error; if(session) await startApp(session.user); else show('login',true); } catch(e) { show('setup',true); $('setupMsg').innerHTML=msg('تعذر الاتصال بالبيانات المحفوظة: '+(e?.message||e)); } }
-});
+/* =========================================================
+   تعديل درجة
+   ========================================================= */
+
+async function editGrade(
+  resultId,
+  student,
+  current,
+  total
+){
+
+  const value =
+    prompt(
+      `الدرجة الجديدة للطالب ${student} (من ${total}):`,
+      current
+    );
+
+
+  if(value === null){
+    return;
+  }
+
+
+  const score =
+    Number(value);
+
+
+  const totalNumber =
+    Number(total);
+
+
+  if(
+    !Number.isFinite(score) ||
+    !Number.isFinite(totalNumber) ||
+    score < 0 ||
+    score > totalNumber
+  ){
+
+    alert(
+      "درجة غير صالحة."
+    );
+
+    return;
+
+  }
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("exam_results")
+      .update({
+        score:score,
+        status:"graded"
+      })
+      .eq(
+        "id",
+        resultId
+      );
+
+
+  if(error){
+
+    alert(
+      "تعذر حفظ الدرجة:\n" +
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  alert(
+    "تم حفظ الدرجة بنجاح."
+  );
+
+
+  /*
+    معرفة exam_id من النتيجة
+  */
+
+  const {
+    data: row,
+    error: rowError
+  } =
+    await supabaseClient
+      .from("exam_results")
+      .select("exam_id")
+      .eq(
+        "id",
+        resultId
+      )
+      .single();
+
+
+  if(rowError){
+
+    alert(
+      rowError.message
+    );
+
+    return;
+
+  }
+
+
+  await teacherResults(
+    row.exam_id
+  );
+
+}
+
+
+/* =========================================================
+   تسجيل الدخول
+   ========================================================= */
+
+async function login(){
+
+  const loginMsg =
+    $("loginMsg");
+
+  const loginBtn =
+    $("loginBtn");
+
+
+  loginMsg.innerHTML =
+    "";
+
+
+  const email =
+    $("email").value.trim();
+
+
+  const password =
+    $("password").value;
+
+
+  if(!email){
+
+    loginMsg.innerHTML =
+      msg(
+        "أدخل البريد الإلكتروني."
+      );
+
+    return;
+
+  }
+
+
+  if(!password){
+
+    loginMsg.innerHTML =
+      msg(
+        "أدخل كلمة المرور."
+      );
+
+    return;
+
+  }
+
+
+  setButtonLoading(
+    loginBtn,
+    true,
+    "جارٍ تسجيل الدخول..."
+  );
+
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .auth
+        .signInWithPassword({
+          email,
+          password
+        });
+
+
+    if(error){
+
+      loginMsg.innerHTML =
+        msg(
+          error.message
+        );
+
+      return;
+
+    }
+
+
+    if(!data?.user){
+
+      loginMsg.innerHTML =
+        msg(
+          "تمت العملية لكن لم يتم العثور على المستخدم."
+        );
+
+      return;
+
+    }
+
+
+    await startApp(
+      data.user
+    );
+
+
+  }catch(error){
+
+    loginMsg.innerHTML =
+      msg(
+        error?.message ||
+        String(error)
+      );
+
+  }finally{
+
+    setButtonLoading(
+      loginBtn,
+      false
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   تسجيل الخروج
+   ========================================================= */
+
+async function logout(){
+
+  if(!supabaseClient){
+    location.reload();
+    return;
+  }
+
+
+  try{
+
+    await supabaseClient
+      .auth
+      .signOut();
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+  }
+
+
+  currentUser = null;
+  currentProfile = null;
+
+
+  location.reload();
+
+}
+
+
+/* =========================================================
+   إعادة الاتصال بالإعدادات المحفوظة
+   ========================================================= */
+
+async function restoreSavedConnection(){
+
+  showLibraryStatus();
+
+
+  const savedUrl =
+    localStorage.getItem(
+      "maeen_sb_url"
+    );
+
+
+  const savedKey =
+    localStorage.getItem(
+      "maeen_sb_key"
+    );
+
+
+  if(
+    !savedUrl ||
+    !savedKey
+  ){
+
+    show(
+      "setup",
+      true
+    );
+
+    return;
+
+  }
+
+
+  $("sbUrl").value =
+    savedUrl;
+
+
+  $("sbKey").value =
+    savedKey;
+
+
+  if(!supabaseLibraryReady()){
+
+    show(
+      "setup",
+      true
+    );
+
+    $("setupMsg").innerHTML =
+      msg(
+        "تعذر تحميل مكتبة Supabase. أعد تحميل الصفحة وتأكد من اتصال الإنترنت."
+      );
+
+    return;
+
+  }
+
+
+  try{
+
+    supabaseClient =
+      createSupabaseClient(
+        savedUrl,
+        savedKey
+      );
+
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .auth
+        .getSession();
+
+
+    if(error){
+      throw error;
+    }
+
+
+    show(
+      "setup",
+      false
+    );
+
+
+    if(data?.session){
+
+      await startApp(
+        data.session.user
+      );
+
+    }else{
+
+      show(
+        "login",
+        true
+      );
+
+    }
+
+
+  }catch(error){
+
+    console.error(
+      "Restore connection error:",
+      error
+    );
+
+
+    show(
+      "setup",
+      true
+    );
+
+
+    $("setupMsg").innerHTML =
+      msg(
+        "تعذر استخدام بيانات الاتصال المحفوظة: " +
+        (
+          error?.message ||
+          String(error)
+        )
+      );
+
+  }
+
+}
+
+
+/* =========================================================
+   تشغيل الصفحة
+   ========================================================= */
+
+window.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    /*
+      ربط الأزرار
+    */
+
+    $("connectBtn")
+      .addEventListener(
+        "click",
+        connect
+      );
+
+
+    $("loginBtn")
+      .addEventListener(
+        "click",
+        login
+      );
+
+
+    $("logoutBtn")
+      .addEventListener(
+        "click",
+        logout
+      );
+
+
+    /*
+      Enter في كلمة المرور
+    */
+
+    $("password")
+      .addEventListener(
+        "keydown",
+        event => {
+
+          if(event.key === "Enter"){
+
+            login();
+
+          }
+
+        }
+      );
+
+
+    /*
+      تشغيل التطبيق
+    */
+
+    restoreSavedConnection();
+
+  }
+);
+
+
+/* =========================================================
+   إتاحة الدوال للأزرار
+   ========================================================= */
+
+window.connect =
+  connect;
+
+window.login =
+  login;
+
+window.logout =
+  logout;
+
+window.loadStudent =
+  loadStudent;
+
+window.takeExam =
+  takeExam;
+
+window.pickAnswer =
+  pickAnswer;
+
+window.submitCurrentExam =
+  submitCurrentExam;
+
+window.viewStudentResult =
+  viewStudentResult;
+
+window.loadTeacher =
+  loadTeacher;
+
+window.teacherResults =
+  teacherResults;
+
+window.editGrade =
+  editGrade;
+
 </script>
+
 </body>
 </html>
