@@ -1,40 +1,2939 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>معين — الاختبارات والتصحيح</title>
+<title>معين — الاختبارات</title>
 
-  <!-- Supabase -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-    crossorigin="anonymous">
-  </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <style>
-    :root{
-      font-family:
-        system-ui,
-        -apple-system,
-        "Segoe UI",
-        Tahoma,
-        Arial,
-        sans-serif;
+<style>
+:root {
+font-family:
+system-ui,
+-apple-system,
+BlinkMacSystemFont,
+"Segoe UI",
+Tahoma,
+Arial,
+sans-serif;
 
-      color:#172033;
-      background:#f5f7fb;
-    }
+--primary: #2563eb;
+--primary-dark: #1d4ed8;
+--success: #16a34a;
+--danger: #dc2626;
+--warning: #d97706;
 
-    *{
-      box-sizing:border-box;
-    }
+--bg: #f4f6fa;
+--card: #ffffff;
+--text: #172033;
+--muted: #6b7280;
+--border: #e5e7eb;
+--soft: #eef4ff;
 
-    html,
-    body{
-      margin:0;
-      padding:0;
-      min-height:100%;
+--radius: 18px;
+}
+
+* {
+box-sizing: border-box;
+}
+
+body {
+margin: 0;
+background: var(--bg);
+color: var(--text);
+min-height: 100vh;
+}
+
+button,
+input,
+select,
+textarea {
+font: inherit;
+}
+
+button {
+cursor: pointer;
+}
+
+.hidden {
+display: none !important;
+}
+
+/* =========================
+TOP BAR
+========================= */
+
+.topbar {
+background: white;
+border-bottom: 1px solid var(--border);
+padding: 15px 20px;
+position: sticky;
+top: 0;
+z-index: 100;
+}
+
+.topbar-inner {
+max-width: 1150px;
+margin: auto;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 15px;
+}
+
+.brand {
+font-size: 24px;
+font-weight: 800;
+}
+
+.user-area {
+display: flex;
+align-items: center;
+gap: 10px;
+color: var(--muted);
+font-size: 14px;
+}
+
+.role-badge {
+padding: 7px 12px;
+border-radius: 999px;
+background: #dcfce7;
+color: #166534;
+font-weight: 700;
+}
+
+/* =========================
+CONTAINER
+========================= */
+
+.container {
+width: min(1150px, calc(100% - 28px));
+margin: 28px auto 60px;
+}
+
+/* =========================
+LOGIN
+========================= */
+
+.login-page {
+min-height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 20px;
+}
+
+.login-card {
+width: min(500px, 100%);
+background: white;
+border: 1px solid var(--border);
+border-radius: 24px;
+padding: 35px;
+box-shadow: 0 12px 35px rgba(0,0,0,.06);
+}
+
+.login-title {
+font-size: 32px;
+font-weight: 800;
+margin: 0 0 10px;
+}
+
+.login-subtitle {
+color: var(--muted);
+margin-bottom: 28px;
+}
+
+/* =========================
+CARDS
+========================= */
+
+.card {
+background: var(--card);
+border: 1px solid var(--border);
+border-radius: var(--radius);
+padding: 24px;
+box-shadow: 0 6px 20px rgba(0,0,0,.04);
+margin-bottom: 20px;
+}
+
+.page-title {
+font-size: 30px;
+font-weight: 800;
+margin: 0 0 7px;
+}
+
+.page-subtitle {
+color: var(--muted);
+margin: 0 0 25px;
+}
+
+/* =========================
+FORMS
+========================= */
+
+label {
+display: block;
+font-weight: 700;
+margin-bottom: 8px;
+}
+
+.form-group {
+margin-bottom: 18px;
+}
+
+input,
+select,
+textarea {
+width: 100%;
+border: 1px solid #d1d5db;
+border-radius: 12px;
+padding: 13px 14px;
+outline: none;
+background: white;
+color: var(--text);
+transition: .2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+border-color: var(--primary);
+box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+}
+
+textarea {
+min-height: 100px;
+resize: vertical;
+}
+
+/* =========================
+BUTTONS
+========================= */
+
+.btn {
+border: 0;
+border-radius: 12px;
+padding: 12px 18px;
+font-weight: 700;
+transition: .2s;
+}
+
+.btn-primary {
+background: var(--primary);
+color: white;
+}
+
+.btn-primary:hover {
+background: var(--primary-dark);
+}
+
+.btn-success {
+background: var(--success);
+color: white;
+}
+
+.btn-danger {
+background: var(--danger);
+color: white;
+}
+
+.btn-secondary {
+background: #eef2f7;
+color: #374151;
+}
+
+.btn:disabled {
+opacity: .6;
+cursor: not-allowed;
+}
+
+.button-row {
+display: flex;
+gap: 10px;
+flex-wrap: wrap;
+margin-top: 15px;
+}
+
+/* =========================
+ALERT
+========================= */
+
+.alert {
+padding: 14px 16px;
+border-radius: 12px;
+margin-bottom: 18px;
+font-weight: 600;
+}
+
+.alert-success {
+background: #ecfdf5;
+color: #166534;
+border: 1px solid #bbf7d0;
+}
+
+.alert-error {
+background: #fef2f2;
+color: #991b1b;
+border: 1px solid #fecaca;
+}
+
+.alert-info {
+background: #eff6ff;
+color: #1e40af;
+border: 1px solid #bfdbfe;
+}
+
+/* =========================
+STATS
+========================= */
+
+.stats {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 15px;
+margin-bottom: 20px;
+}
+
+.stat {
+background: white;
+border: 1px solid var(--border);
+border-radius: 16px;
+padding: 20px;
+}
+
+.stat-number {
+font-size: 30px;
+font-weight: 800;
+margin-bottom: 5px;
+}
+
+.stat-label {
+color: var(--muted);
+}
+
+/* =========================
+EXAM BUILDER
+========================= */
+
+.question-card {
+border: 1px solid var(--border);
+border-radius: 16px;
+padding: 20px;
+margin-bottom: 15px;
+background: #fafafa;
+}
+
+.question-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 10px;
+margin-bottom: 15px;
+}
+
+.question-number {
+font-size: 18px;
+font-weight: 800;
+}
+
+.options {
+display: grid;
+gap: 10px;
+margin-top: 12px;
+}
+
+.option-row {
+display: grid;
+grid-template-columns: auto 1fr;
+gap: 10px;
+align-items: center;
+}
+
+.option-row input[type="radio"] {
+width: auto;
+}
+
+/* =========================
+EXAM LIST
+========================= */
+
+.exam-list {
+display: grid;
+gap: 15px;
+}
+
+.exam-item {
+background: white;
+border: 1px solid var(--border);
+border-radius: 16px;
+padding: 20px;
+}
+
+.exam-item-title {
+font-size: 21px;
+font-weight: 800;
+margin-bottom: 8px;
+}
+
+.exam-meta {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+color: var(--muted);
+font-size: 14px;
+margin-bottom: 15px;
+}
+
+.meta-badge {
+background: #f1f5f9;
+padding: 6px 10px;
+border-radius: 999px;
+}
+
+/* =========================
+STUDENT EXAM
+========================= */
+
+.student-question {
+background: white;
+border: 1px solid var(--border);
+border-radius: 16px;
+padding: 20px;
+margin-bottom: 16px;
+}
+
+.student-question-title {
+font-weight: 800;
+font-size: 18px;
+margin-bottom: 15px;
+}
+
+.answer-choice {
+display: block;
+padding: 12px 14px;
+border: 1px solid var(--border);
+border-radius: 12px;
+margin-bottom: 9px;
+cursor: pointer;
+transition: .2s;
+}
+
+.answer-choice:hover {
+background: #f8fafc;
+}
+
+.answer-choice input {
+width: auto;
+margin-left: 8px;
+}
+
+/* =========================
+RESULT
+========================= */
+
+.result-box {
+text-align: center;
+padding: 30px;
+border-radius: 18px;
+background: #eff6ff;
+border: 1px solid #bfdbfe;
+margin-bottom: 20px;
+}
+
+.result-score {
+font-size: 52px;
+font-weight: 900;
+color: var(--primary);
+}
+
+/* =========================
+LOADING
+========================= */
+
+.loading {
+text-align: center;
+padding: 40px;
+color: var(--muted);
+}
+
+.spinner {
+width: 35px;
+height: 35px;
+border: 4px solid #e5e7eb;
+border-top-color: var(--primary);
+border-radius: 50%;
+animation: spin .8s linear infinite;
+margin: 0 auto 15px;
+}
+
+@keyframes spin {
+to {
+transform: rotate(360deg);
+}
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media (max-width: 700px) {
+
+.stats {
+grid-template-columns: 1fr;
+}
+
+.topbar-inner {
+align-items: flex-start;
+}
+
+.user-area {
+flex-direction: column;
+align-items: flex-end;
+}
+
+.card {
+padding: 18px;
+}
+
+.login-card {
+padding: 25px 20px;
+}
+
+.page-title {
+font-size: 26px;
+}
+
+.button-row {
+flex-direction: column;
+}
+
+.button-row .btn {
+width: 100%;
+}
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+LOGIN
+========================================================= -->
+
+<section id="loginPage" class="login-page">
+
+<div class="login-card">
+
+<h1 class="login-title">تسجيل الدخول</h1>
+
+<p class="login-subtitle">
+منصة معين التعليمية
+</p>
+
+<div id="loginMessage"></div>
+
+<form id="loginForm">
+
+<div class="form-group">
+
+<label for="loginEmail">
+البريد الإلكتروني
+</label>
+
+<input
+id="loginEmail"
+type="email"
+placeholder="name@example.com"
+required
+autocomplete="email"
+>
+
+</div>
+
+<div class="form-group">
+
+<label for="loginPassword">
+كلمة المرور
+</label>
+
+<input
+id="loginPassword"
+type="password"
+required
+autocomplete="current-password"
+>
+
+</div>
+
+<button
+id="loginButton"
+class="btn btn-primary"
+type="submit"
+style="width:100%;"
+>
+دخول
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+APP
+========================================================= -->
+
+<div id="app" class="hidden">
+
+<header class="topbar">
+
+<div class="topbar-inner">
+
+<div class="brand">
+معين
+</div>
+
+<div class="user-area">
+
+<span id="userEmail"></span>
+
+<span id="userRole" class="role-badge"></span>
+
+<button
+id="logoutButton"
+class="btn btn-secondary"
+>
+تسجيل الخروج
+</button>
+
+</div>
+
+</div>
+
+</header>
+
+
+<main class="container">
+
+<div id="globalMessage"></div>
+
+<!-- =====================================================
+TEACHER DASHBOARD
+====================================================== -->
+
+<section id="teacherDashboard" class="hidden">
+
+<h1 class="page-title">
+لوحة المعلم
+</h1>
+
+<p class="page-subtitle">
+أنشئ الاختبارات وحدد الفصل والأسئلة ثم اعرضها للطلاب.
+</p>
+
+
+<div class="stats">
+
+<div class="stat">
+
+<div
+id="teacherExamCount"
+class="stat-number"
+>
+0
+</div>
+
+<div class="stat-label">
+الاختبارات
+</div>
+
+</div>
+
+<div class="stat">
+
+<div
+id="teacherClassCount"
+class="stat-number"
+>
+0
+</div>
+
+<div class="stat-label">
+الفصول
+</div>
+
+</div>
+
+<div class="stat">
+
+<div class="stat-number">
+معلم
+</div>
+
+<div class="stat-label">
+نوع الحساب
+</div>
+
+</div>
+
+</div>
+
+
+<!-- CREATE EXAM -->
+
+<div class="card">
+
+<h2>
+إنشاء اختبار جديد
+</h2>
+
+<p class="page-subtitle">
+سيتم حفظ الأسئلة والإجابات داخل
+<code>exam_answer_keys.answer_key</code>.
+</p>
+
+
+<div class="form-group">
+
+<label for="examTitle">
+عنوان الاختبار
+</label>
+
+<input
+id="examTitle"
+type="text"
+placeholder="مثال: اختبار الرياضيات الأول"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="examClass">
+الفصل
+</label>
+
+<select id="examClass">
+
+<option value="">
+اختر الفصل
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="examDuration">
+مدة الاختبار بالدقائق
+</label>
+
+<input
+id="examDuration"
+type="number"
+min="1"
+value="30"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="examStart">
+وقت بداية الاختبار — اختياري
+</label>
+
+<input
+id="examStart"
+type="datetime-local"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="examEnd">
+وقت نهاية الاختبار — اختياري
+</label>
+
+<input
+id="examEnd"
+type="datetime-local"
+>
+
+</div>
+
+
+<h3>
+الأسئلة
+</h3>
+
+<div id="questionsContainer"></div>
+
+
+<div class="button-row">
+
+<button
+id="addQuestionButton"
+class="btn btn-secondary"
+type="button"
+>
++ إضافة سؤال
+</button>
+
+<button
+id="createExamButton"
+class="btn btn-primary"
+type="button"
+>
+حفظ ونشر الاختبار
+</button>
+
+</div>
+
+</div>
+
+
+<!-- TEACHER EXAMS -->
+
+<div class="card">
+
+<h2>
+اختباراتي
+</h2>
+
+<div
+id="teacherExams"
+class="exam-list"
+></div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+STUDENT DASHBOARD
+====================================================== -->
+
+<section id="studentDashboard" class="hidden">
+
+<h1 class="page-title">
+اختبارات الطالب
+</h1>
+
+<p class="page-subtitle">
+الاختبارات المتاحة حاليًا.
+</p>
+
+
+<div class="card">
+
+<div
+id="studentExams"
+class="exam-list"
+></div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+STUDENT EXAM PAGE
+====================================================== -->
+
+<section id="studentExamPage" class="hidden">
+
+<button
+id="backToStudentExams"
+class="btn btn-secondary"
+type="button"
+style="margin-bottom:15px;"
+>
+← العودة للاختبارات
+</button>
+
+
+<div class="card">
+
+<h1
+id="studentExamTitle"
+class="page-title"
+></h1>
+
+<p
+id="studentExamMeta"
+class="page-subtitle"
+></p>
+
+</div>
+
+
+<form id="studentExamForm"></form>
+
+
+<div class="card">
+
+<button
+id="submitStudentExam"
+class="btn btn-primary"
+type="button"
+style="width:100%;"
+>
+تسليم الاختبار
+</button>
+
+</div>
+
+
+<div
+id="studentResult"
+class="hidden"
+></div>
+
+</section>
+
+
+</main>
+
+</div>
+
+
+<script>
+/* =========================================================
+SUPABASE CONFIG
+
+ضع بيانات مشروعك هنا.
+
+SUPABASE_URL:
+من Supabase:
+Project Settings → API
+
+SUPABASE_ANON_KEY:
+من:
+Project Settings → API → Publishable / anon key
+========================================================= */
+
+const SUPABASE_URL =
+"https://jismzhdkzitlzjdmaltw.supabase.co
+";
+
+const SUPABASE_ANON_KEY =
+"sb_publishable_VXgWWjizZL-_7kchLqP9Mw_lfd-BTk3
+";
+
+
+/* =========================================================
+SUPABASE CLIENT
+========================================================= */
+
+const {
+createClient
+} = supabase;
+
+const db = createClient(
+SUPABASE_URL,
+SUPABASE_ANON_KEY
+);
+
+
+/* =========================================================
+STATE
+========================================================= */
+
+let currentUser = null;
+let currentProfile = null;
+let teacherClasses = [];
+let teacherExams = [];
+let currentStudentExam = null;
+
+let questionCounter = 0;
+
+
+/* =========================================================
+DOM
+========================================================= */
+
+const loginPage =
+document.getElementById("loginPage");
+
+const app =
+document.getElementById("app");
+
+const loginForm =
+document.getElementById("loginForm");
+
+const loginMessage =
+document.getElementById("loginMessage");
+
+const globalMessage =
+document.getElementById("globalMessage");
+
+const teacherDashboard =
+document.getElementById("teacherDashboard");
+
+const studentDashboard =
+document.getElementById("studentDashboard");
+
+const studentExamPage =
+document.getElementById("studentExamPage");
+
+const questionsContainer =
+document.getElementById("questionsContainer");
+
+const examClass =
+document.getElementById("examClass");
+
+const teacherExams =
+document.getElementById("teacherExams");
+
+const studentExams =
+document.getElementById("studentExams");
+
+
+/* =========================================================
+HELPERS
+========================================================= */
+
+function escapeHTML(value) {
+
+return String(value ?? "")
+.replaceAll("&", "&")
+.replaceAll("<", "<")
+.replaceAll(">", ">")
+.replaceAll('"', """)
+.replaceAll("'", "'");
+
+}
+
+
+function showMessage(
+container,
+message,
+type = "info"
+) {
+
+container.innerHTML = &lt;div class="alert alert-${type}">
+${escapeHTML(message)} &lt;/div&gt;;
+
+}
+
+
+function clearMessage(container) {
+
+container.innerHTML = "";
+
+}
+
+
+function showLogin() {
+
+loginPage.classList.remove("hidden");
+app.classList.add("hidden");
+
+teacherDashboard.classList.add("hidden");
+studentDashboard.classList.add("hidden");
+studentExamPage.classList.add("hidden");
+
+}
+
+
+function showApp() {
+
+loginPage.classList.add("hidden");
+app.classList.remove("hidden");
+
+}
+
+
+function formatDate(date) {
+
+if (!date) return "غير محدد";
+
+try {
+
+return new Date(date).toLocaleString(
+"ar-SA",
+{
+dateStyle: "medium",
+timeStyle: "short"
+}
+);
+
+} catch {
+
+return date;
+
+}
+
+}
+
+
+function parseAnswerKey(value) {
+
+if (!value) {
+
+return {
+questions: []
+};
+
+}
+
+if (typeof value === "string") {
+
+try {
+return JSON.parse(value);
+} catch {
+return {
+questions: []
+};
+}
+
+}
+
+return value;
+
+}
+
+
+/* =========================================================
+AUTH
+========================================================= */
+
+async function login(email, password) {
+
+clearMessage(loginMessage);
+
+const button =
+document.getElementById("loginButton");
+
+button.disabled = true;
+button.textContent = "جارٍ الدخول...";
+
+try {
+
+const {
+data,
+error
+} = await db.auth.signInWithPassword({
+email,
+password
+});
+
+if (error) {
+throw error;
+}
+
+currentUser = data.user;
+
+await loadUser();
+
+} catch (error) {
+
+console.error(error);
+
+showMessage(
+loginMessage,
+error.message ||
+"تعذر تسجيل الدخول.",
+"error"
+);
+
+} finally {
+
+button.disabled = false;
+button.textContent = "دخول";
+
+}
+
+}
+
+
+async function logout() {
+
+await db.auth.signOut();
+
+currentUser = null;
+currentProfile = null;
+
+showLogin();
+
+}
+
+
+/* =========================================================
+LOAD USER PROFILE
+========================================================= */
+
+async function loadUser() {
+
+if (!currentUser) {
+
+showLogin();
+return;
+
+}
+
+
+const {
+data,
+error
+} = await db
+.from("profiles")
+.select("*")
+.eq("id", currentUser.id)
+.maybeSingle();
+
+
+if (error) {
+
+console.error(error);
+
+showMessage(
+loginMessage,
+"تم تسجيل الدخول ولكن تعذر قراءة بيانات الملف الشخصي: " +
+error.message,
+"error"
+);
+
+await db.auth.signOut();
+
+return;
+
+}
+
+
+if (!data) {
+
+showMessage(
+loginMessage,
+"لم يتم العثور على ملف لهذا المستخدم في جدول profiles.",
+"error"
+);
+
+await db.auth.signOut();
+
+return;
+
+}
+
+
+currentProfile = data;
+
+
+document.getElementById("userEmail").textContent =
+currentUser.email || data.email || "";
+
+document.getElementById("userRole").textContent =
+data.role || "غير محدد";
+
+
+showApp();
+
+
+if (data.role === "teacher") {
+
+await loadTeacherDashboard();
+
+} else if (data.role === "student") {
+
+await loadStudentDashboard();
+
+} else {
+
+showMessage(
+globalMessage,
+"دور المستخدم غير معروف: " + data.role,
+"error"
+);
+
+}
+
+}
+
+
+/* =========================================================
+TEACHER DASHBOARD
+========================================================= */
+
+async function loadTeacherDashboard() {
+
+teacherDashboard.classList.remove("hidden");
+studentDashboard.classList.add("hidden");
+studentExamPage.classList.add("hidden");
+
+
+await loadTeacherClasses();
+
+await loadTeacherExams();
+
+resetExamBuilder();
+
+}
+
+
+async function loadTeacherClasses() {
+
+const {
+data,
+error
+} = await db
+.from("classes")
+.select("*")
+.eq("teacher_id", currentUser.id)
+.is("archived_at", null)
+.order("created_at", {
+ascending: false
+});
+
+
+if (error) {
+
+console.error(error);
+
+showMessage(
+globalMessage,
+"تعذر تحميل الفصول: " + error.message,
+"error"
+);
+
+return;
+
+}
+
+
+teacherClasses = data || [];
+
+
+examClass.innerHTML = &lt;option value=""&gt; اختر الفصل &lt;/option&gt;;
+
+
+teacherClasses.forEach(cls => {
+
+const option =
+document.createElement("option");
+
+option.value = cls.id;
+
+option.textContent =
+${cls.name}${cls.grade ? " — " + cls.grade : ""}${cls.section ? " — " + cls.section : ""}`;
+
+examClass.appendChild(option);
+
+});
+
+
+document.getElementById(
+"teacherClassCount"
+).textContent =
+teacherClasses.length;
+
+}
+
+
+async function loadTeacherExams() {
+
+const {
+data,
+error
+} = await db
+.from("exams")
+.select("*")
+.eq("teacher_id", currentUser.id)
+.order("created_at", {
+ascending: false
+});
+
+
+if (error) {
+
+console.error(error);
+
+showMessage(
+globalMessage,
+"تعذر تحميل الاختبارات: " + error.message,
+"error"
+);
+
+return;
+
+}
+
+
+teacherExams = data || [];
+
+
+document.getElementById(
+"teacherExamCount"
+).textContent =
+teacherExams.length;
+
+
+renderTeacherExams();
+
+}
+
+
+function renderTeacherExams() {
+
+if (!teacherExams.length) {
+
+teacherExams.innerHTML = &lt;div class="alert alert-info"&gt; لم تنشئ أي اختبار حتى الآن. &lt;/div&gt;;
+
+return;
+
+}
+
+
+teacherExams.innerHTML =
+teacherExams
+.map(exam => {
+
+const cls =
+teacherClasses.find(
+c => c.id === exam.class_id
+);
+
+return `
+<div class="exam-item">
+
+<div class="exam-item-title">
+`${escapeHTML(exam.title)}
+</div>
+
+<div class="exam-meta">
+
+<span class="meta-badge">
+الفصل:
+$`{escapeHTML(cls?.name || "غير معروف")}
+</span>
+
+<span class="meta-badge">
+الدرجة:
+`${exam.total_score ?? 0}
+</span>
+
+<span class="meta-badge">
+المدة:
+$`{exam.duration_minutes ?? "—"} دقيقة
+</span>
+
+<span class="meta-badge">
+الإنشاء:
+`${formatDate(exam.created_at)}
+</span>
+
+</div>
+
+<div class="button-row">
+
+<button
+class="btn btn-secondary"
+onclick="viewExamQuestions('$`{exam.id}')"
+>
+عرض الأسئلة
+</button>
+
+<button
+class="btn btn-danger"
+onclick="deleteExam('`${exam.id}')"
+>
+حذف
+</button>
+
+</div>
+
+</div>
+`;
+
+})
+.join("");
+
+}
+
+
+/* =========================================================
+EXAM BUILDER
+========================================================= */
+
+function resetExamBuilder() {
+
+document.getElementById("examTitle").value = "";
+
+document.getElementById("examDuration").value = 30;
+
+document.getElementById("examStart").value = "";
+
+document.getElementById("examEnd").value = "";
+
+questionsContainer.innerHTML = "";
+
+questionCounter = 0;
+
+addQuestion();
+
+}
+
+
+function addQuestion() {
+
+questionCounter++;
+
+const number =
+questionCounter;
+
+const div =
+document.createElement("div");
+
+div.className =
+"question-card";
+
+div.dataset.questionNumber =
+number;
+
+
+div.innerHTML = `
+
+<div class="question-header">
+
+<div class="question-number">
+السؤال $`{number}
+</div>
+
+<button
+type="button"
+class="btn btn-danger"
+onclick="removeQuestion(this)"
+>
+حذف السؤال
+</button>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+نص السؤال
+</label>
+
+<textarea
+class="question-text"
+placeholder="اكتب نص السؤال هنا..."
+></textarea>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+الدرجة
+</label>
+
+<input
+class="question-score"
+type="number"
+min="1"
+value="1"
+>
+
+</div>
+
+
+<label>
+الخيارات
+</label>
+
+
+<div class="options">
+
+<div class="option-row">
+
+<input
+type="radio"
+name="correct-`${number}"
+value="0"
+checked
+>
+
+<input
+class="option-input"
+type="text"
+placeholder="الخيار الأول"
+>
+
+</div>
+
+
+<div class="option-row">
+
+<input
+type="radio"
+name="correct-$`{number}"
+value="1"
+>
+
+<input
+class="option-input"
+type="text"
+placeholder="الخيار الثاني"
+>
+
+</div>
+
+
+<div class="option-row">
+
+<input
+type="radio"
+name="correct-`${number}"
+value="2"
+>
+
+<input
+class="option-input"
+type="text"
+placeholder="الخيار الثالث"
+>
+
+</div>
+
+
+<div class="option-row">
+
+<input
+type="radio"
+name="correct-$`{number}"
+value="3"
+>
+
+<input
+class="option-input"
+type="text"
+placeholder="الخيار الرابع"
+>
+
+</div>
+
+</div>
+
+`;
+
+
+questionsContainer.appendChild(div);
+
+}
+
+
+function removeQuestion(button) {
+
+const card =
+button.closest(".question-card");
+
+if (card) {
+card.remove();
+}
+
+
+renumberQuestions();
+
+}
+
+
+function renumberQuestions() {
+
+const cards =
+document.querySelectorAll(
+".question-card"
+);
+
+
+cards.forEach((card, index) => {
+
+const number =
+index + 1;
+
+card.dataset.questionNumber =
+number;
+
+const title =
+card.querySelector(
+".question-number"
+);
+
+if (title) {
+
+title.textContent =
+السؤال${number}`;
+
+}
+
+
+const radios =
+card.querySelectorAll(
+'input[type="radio"]'
+);
+
+
+radios.forEach(radio => {
+
+radio.name =
+correct-renumbered-${number}`;
+
+});
+
+});
+
+
+questionCounter =
+cards.length;
+
+}
+
+
+/* =========================================================
+COLLECT QUESTIONS
+========================================================= */
+
+function collectQuestions() {
+
+const cards =
+document.querySelectorAll(
+".question-card"
+);
+
+
+if (!cards.length) {
+
+throw new Error(
+"أضف سؤالًا واحدًا على الأقل."
+);
+
+}
+
+
+const questions = [];
+
+
+cards.forEach((card, index) => {
+
+const text =
+card.querySelector(
+".question-text"
+).value.trim();
+
+
+const score =
+Number(
+card.querySelector(
+".question-score"
+).value
+);
+
+
+const options =
+Array.from(
+card.querySelectorAll(
+".option-input"
+)
+).map(
+input => input.value.trim()
+);
+
+
+const correctRadio =
+card.querySelector(
+'input[type="radio"]:checked'
+);
+
+
+if (!text) {
+
+throw new Error(
+اكتب نص السؤال رقم${index + 1}.`
+);
+
+}
+
+
+if (
+options.some(
+option => !option
+)
+) {
+
+throw new Error(
+أكمل جميع خيارات السؤال رقم ${index + 1}.`
+);
+
+}
+
+
+if (!correctRadio) {
+
+throw new Error(
+حدد الإجابة الصحيحة للسؤال رقم${index + 1}.`
+);
+
+}
+
+
+questions.push({
+
+id:
+crypto.randomUUID(),
+
+text,
+
+options,
+
+correctIndex:
+Number(correctRadio.value),
+
+score:
+Number.isFinite(score) && score > 0
+? score
+: 1
+
+});
+
+});
+
+
+return questions;
+
+}
+
+
+/* =========================================================
+CREATE EXAM
+========================================================= */
+
+async function createExam() {
+
+clearMessage(globalMessage);
+
+
+try {
+
+if (
+!currentUser ||
+!currentProfile ||
+currentProfile.role !== "teacher"
+) {
+
+throw new Error(
+"يجب تسجيل الدخول كمعلم."
+);
+
+}
+
+
+const title =
+document.getElementById(
+"examTitle"
+).value.trim();
+
+
+const classId =
+examClass.value;
+
+
+const duration =
+Number(
+document.getElementById(
+"examDuration"
+).value
+);
+
+
+const startValue =
+document.getElementById(
+"examStart"
+).value;
+
+
+const endValue =
+document.getElementById(
+"examEnd"
+).value;
+
+
+if (!title) {
+
+throw new Error(
+"اكتب عنوان الاختبار."
+);
+
+}
+
+
+if (!classId) {
+
+throw new Error(
+"اختر الفصل."
+);
+
+}
+
+
+const selectedClass =
+teacherClasses.find(
+c => c.id === classId
+);
+
+
+if (!selectedClass) {
+
+throw new Error(
+"الفصل المحدد غير موجود."
+);
+
+}
+
+
+const questions =
+collectQuestions();
+
+
+const totalScore =
+questions.reduce(
+(sum, q) =>
+sum + q.score,
+0
+);
+
+
+const examId =
+crypto.randomUUID();
+
+
+const createButton =
+document.getElementById(
+"createExamButton"
+);
+
+
+createButton.disabled = true;
+
+createButton.textContent =
+"جارٍ الحفظ...";
+
+
+/* -----------------------------------------
+1. INSERT EXAM
+----------------------------------------- */
+
+const examData = {
+
+id:
+examId,
+
+school_id:
+selectedClass.school_id,
+
+class_id:
+selectedClass.id,
+
+subject_id:
+null,
+
+teacher_id:
+currentUser.id,
+
+title,
+
+total_score:
+totalScore,
+
+duration_minutes:
+duration || null,
+
+starts_at:
+startValue
+? new Date(startValue).toISOString()
+: null,
+
+ends_at:
+endValue
+? new Date(endValue).toISOString()
+: null
+
+};
+
+
+const {
+error: examError
+} = await db
+.from("exams")
+.insert(examData);
+
+
+if (examError) {
+
+throw examError;
+
+}
+
+
+/* -----------------------------------------
+2. INSERT ANSWER KEY
+----------------------------------------- */
+
+const answerKey = {
+
+version: 1,
+
+questions
+
+};
+
+
+const {
+error: answerError
+} = await db
+.from("exam_answer_keys")
+.insert({
+
+exam_id:
+examId,
+
+answer_key:
+answerKey
+
+});
+
+
+if (answerError) {
+
+/*
+إذا فشل حفظ الأسئلة نحاول حذف الاختبار
+حتى لا يبقى اختبار فارغ.
+*/
+
+await db
+.from("exams")
+.delete()
+.eq("id", examId);
+
+throw answerError;
+
+}
+
+
+showMessage(
+globalMessage,
+"تم إنشاء الاختبار ونشره بنجاح.",
+"success"
+);
+
+
+resetExamBuilder();
+
+await loadTeacherExams();
+
+
+} catch (error) {
+
+console.error(error);
+
+showMessage(
+globalMessage,
+error.message ||
+"حدث خطأ أثناء إنشاء الاختبار.",
+"error"
+);
+
+} finally {
+
+const createButton =
+document.getElementById(
+"createExamButton"
+);
+
+createButton.disabled = false;
+
+createButton.textContent =
+"حفظ ونشر الاختبار";
+
+}
+
+}
+
+
+/* =========================================================
+VIEW EXAM QUESTIONS — TEACHER
+========================================================= */
+
+async function viewExamQuestions(examId) {
+
+const {
+data,
+error
+} = await db
+.from("exam_answer_keys")
+.select("answer_key")
+.eq("exam_id", examId)
+.maybeSingle();
+
+
+if (error) {
+
+showMessage(
+globalMessage,
+"تعذر تحميل الأسئلة: " +
+error.message,
+"error"
+);
+
+return;
+
+}
+
+
+if (!data) {
+
+showMessage(
+globalMessage,
+"لا توجد أسئلة محفوظة لهذا الاختبار.",
+"error"
+);
+
+return;
+
+}
+
+
+const answerKey =
+parseAnswerKey(
+data.answer_key
+);
+
+
+const questions =
+answerKey.questions || [];
+
+
+let html = `
+<div class="card">
+
+<h2>
+أسئلة الاختبار
+</h2>
+`;
+
+
+questions.forEach(
+(q, index) => {
+
+html += `
+
+<div class="question-card">
+
+<div class="question-number">
+السؤال $`{index + 1}
+</div>
+
+<p>
+`${escapeHTML(q.text)}
+</p>
+
+<ol>
+`;
+
+
+q.options.forEach(
+(option, optionIndex) => {
+
+const correct =
+optionIndex === q.correctIndex;
+
+html += `
+
+<li
+style="
+margin-bottom:8px;
+$`{
+correct
+? "font-weight:800;color:#15803d;"
+: ""
+}
+"
+>
+
+`${escapeHTML(option)}
+
+$`{
+correct
+? " ✓"
+: ""
+}
+
+</li>
+
+`;
+
+}
+);
+
+
+html += `
+
+</ol>
+
+<small>
+الدرجة: `${q.score}
+</small>
+
+</div>
+
+`;
+
+}
+);
+
+
+html += &lt;/div&gt;;
+
+
+teacherExams.insertAdjacentHTML(
+"beforebegin",
+html
+);
+
+}
+
+
+/* =========================================================
+DELETE EXAM
+========================================================= */
+
+async function deleteExam(examId) {
+
+const confirmed =
+confirm(
+"هل أنت متأكد من حذف هذا الاختبار؟"
+);
+
+
+if (!confirmed) {
+return;
+}
+
+
+clearMessage(globalMessage);
+
+
+try {
+
+/*
+نحذف answer key أولًا.
+*/
+
+const {
+error: answerError
+} = await db
+.from("exam_answer_keys")
+.delete()
+.eq("exam_id", examId);
+
+
+if (answerError) {
+
+throw answerError;
+
+}
+
+
+const {
+error: examError
+} = await db
+.from("exams")
+.delete()
+.eq("id", examId);
+
+
+if (examError) {
+
+throw examError;
+
+}
+
+
+showMessage(
+globalMessage,
+"تم حذف الاختبار.",
+"success"
+);
+
+
+await loadTeacherExams();
+
+} catch (error) {
+
+console.error(error);
+
+showMessage(
+globalMessage,
+"تعذر حذف الاختبار: " +
+error.message,
+"error"
+);
+
+}
+
+}
+
+
+/* =========================================================
+STUDENT DASHBOARD
+========================================================= */
+
+async function loadStudentDashboard() {
+
+teacherDashboard.classList.add("hidden");
+studentDashboard.classList.remove("hidden");
+studentExamPage.classList.add("hidden");
+
+
+await loadStudentExams();
+
+}
+
+
+async function loadStudentExams() {
+
+studentExams.innerHTML = &lt;div class="loading"&gt; &lt;div class="spinner"&gt;&lt;/div&gt; جارٍ تحميل الاختبارات... &lt;/div&gt;;
+
+
+/*
+نجلب الاختبارات.
+نستخدم classes لمعرفة اسم الفصل.
+*/
+
+const {
+data: exams,
+error: examError
+} = await db
+.from("exams")
+.select("*")
+.order("created_at", {
+ascending: false
+});
+
+
+if (examError) {
+
+console.error(examError);
+
+showMessage(
+globalMessage,
+"تعذر تحميل الاختبارات: " +
+examError.message,
+"error"
+);
+
+return;
+
+}
+
+
+const {
+data: classes,
+error: classError
+} = await db
+.from("classes")
+.select("*");
+
+
+if (classError) {
+
+console.error(classError);
+
+}
+
+
+const classList =
+classes || [];
+
+
+const availableExams =
+(exams || [])
+.filter(exam => {
+
+const now =
+Date.now();
+
+
+if (
+exam.starts_at &&
+new Date(exam.starts_at).getTime() > now
+) {
+
+return false;
+
+}
+
+
+if (
+exam.ends_at &&
+new Date(exam.ends_at).getTime() < now
+) {
+
+return false;
+
+}
+
+
+return true;
+
+});
+
+
+if (!availableExams.length) {
+
+studentExams.innerHTML = &lt;div class="alert alert-info"&gt; لا توجد اختبارات متاحة حاليًا. &lt;/div&gt;;
+
+return;
+
+}
+
+
+studentExams.innerHTML =
+availableExams
+.map(exam => {
+
+const cls =
+classList.find(
+c => c.id === exam.class_id
+);
+
+
+return `
+
+<div class="exam-item">
+
+<div class="exam-item-title">
+$`{escapeHTML(exam.title)}
+</div>
+
+<div class="exam-meta">
+
+<span class="meta-badge">
+الفصل:
+`${escapeHTML(cls?.name || "غير محدد")}
+</span>
+
+<span class="meta-badge">
+الدرجة:
+$`{exam.total_score ?? 0}
+</span>
+
+<span class="meta-badge">
+المدة:
+`${exam.duration_minutes ?? "—"} دقيقة
+</span>
+
+</div>
+
+<button
+class="btn btn-primary"
+onclick="openStudentExam('$`{exam.id}')"
+>
+بدء الاختبار
+</button>
+
+</div>
+
+`;
+
+})
+.join("");
+
+}
+
+
+/* =========================================================
+OPEN STUDENT EXAM
+========================================================= */
+
+async function openStudentExam(examId) {
+
+clearMessage(globalMessage);
+
+
+const {
+data: exam,
+error: examError
+} = await db
+.from("exams")
+.select("*")
+.eq("id", examId)
+.maybeSingle();
+
+
+if (examError) {
+
+showMessage(
+globalMessage,
+examError.message,
+"error"
+);
+
+return;
+
+}
+
+
+if (!exam) {
+
+showMessage(
+globalMessage,
+"الاختبار غير موجود.",
+"error"
+);
+
+return;
+
+}
+
+
+const {
+data: answerData,
+error: answerError
+} = await db
+.from("exam_answer_keys")
+.select("answer_key")
+.eq("exam_id", examId)
+.maybeSingle();
+
+
+if (answerError) {
+
+showMessage(
+globalMessage,
+"تعذر تحميل أسئلة الاختبار: " +
+answerError.message,
+"error"
+);
+
+return;
+
+}
+
+
+if (!answerData) {
+
+showMessage(
+globalMessage,
+"لا توجد أسئلة لهذا الاختبار.",
+"error"
+);
+
+return;
+
+}
+
+
+const answerKey =
+parseAnswerKey(
+answerData.answer_key
+);
+
+
+const questions =
+answerKey.questions || [];
+
+
+currentStudentExam = {
+
+exam,
+
+questions
+
+};
+
+
+studentDashboard.classList.add("hidden");
+studentExamPage.classList.remove("hidden");
+
+
+document.getElementById(
+"studentExamTitle"
+).textContent =
+exam.title;
+
+
+document.getElementById(
+"studentExamMeta"
+).textContent =
+الدرجة الكلية:${exam.total_score ?? 0} — المدة: ${exam.duration_minutes ?? "غير محددة"} دقيقة;
+
+
+const form =
+document.getElementById(
+"studentExamForm"
+);
+
+
+form.innerHTML =
+questions
+.map((q, index) => {
+
+return `
+
+<div class="student-question">
+
+<div class="student-question-title">
+
+${index + 1}. ${escapeHTML(q.text)}
+
+</div>
+
+
+<div>
+
+${q.options .map( (option, optionIndex) =&gt;
+
+<label class="answer-choice">
+
+<input
+type="radio"
+name="answer- {optionIndex}"
+>
+
+$`{escapeHTML(option)}
+
+</label>
+
+`
+)
+.join("")}
+
+</div>
+
+</div>
+
+`;
+
+})
+.join("");
+
+
+document.getElementById(
+"studentResult"
+).classList.add("hidden");
+
+}
+
+
+/* =========================================================
+SUBMIT STUDENT EXAM
+========================================================= */
+
+function submitStudentExam() {
+
+if (!currentStudentExam) {
+
+return;
+
+}
+
+
+const {
+exam,
+questions
+} =
+currentStudentExam;
+
+
+let score = 0;
+
+let answered = 0;
+
+
+questions.forEach(
+(question, index) => {
+
+const selected =
+document.querySelector(
+input[name="answer-${index}"]:checked`
+);
+
+
+if (!selected) {
+return;
+}
+
+
+answered++;
+
+
+const selectedIndex =
+Number(
+selected.value
+);
+
+
+if (
+selectedIndex ===
+Number(question.correctIndex)
+) {
+
+score +=
+Number(question.score || 1);
+
+}
+
+}
+);
+
+
+const total =
+Number(
+exam.total_score || 0
+);
+
+
+const percentage =
+total > 0
+? Math.round(
+(score / total) * 100
+)
+: 0;
+
+
+const result =
+document.getElementById(
+"studentResult"
+);
+
+
+result.classList.remove("hidden");
+
+
+result.innerHTML = `
+
+<div class="card">
+
+<div class="result-box">
+
+<h2>
+تم تسليم الاختبار
+</h2>
+
+<div class="result-score">
+ {total}
+</div>
+
+<p>
+النسبة:
+<strong>
+$`{percentage}%
+</strong>
+</p>
+
+<p>
+عدد الأسئلة المجاب عنها:
+`${answered}
+من
+${questions.length}
+</p>
+
+</div>
+
+<button
+class="btn btn-primary"
+onclick="loadStudentDashboard()"
+>
+العودة إلى الاختبارات
+</button>
+
+</div>
+
+`;
+
+
+window.scrollTo({
+top: 0,
+behavior: "smooth"
+});
+
+}
+
+
+/* =========================================================
+EVENTS
+========================================================= */
+
+loginForm.addEventListener(
+"submit",
+async event => {
+
+event.preventDefault();
+
+
+const email =
+document.getElementById(
+"loginEmail"
+).value.trim();
+
+
+const password =
+document.getElementById(
+"loginPassword"
+).value;
+
+
+await login(
+email,
+password
+);
+
+}
+);
+
+
+document.getElementById(
+"logoutButton"
+).addEventListener(
+"click",
+logout
+);
+
+
+document.getElementById(
+"addQuestionButton"
+).addEventListener(
+"click",
+addQuestion
+);
+
+
+document.getElementById(
+"createExamButton"
+).addEventListener(
+"click",
+createExam
+);
+
+
+document.getElementById(
+"submitStudentExam"
+).addEventListener(
+"click",
+submitStudentExam
+);
+
+
+document.getElementById(
+"backToStudentExams"
+).addEventListener(
+"click",
+loadStudentDashboard
+);
+
+
+/* =========================================================
+INITIAL SESSION
+========================================================= */
+
+async function initialize() {
+
+try {
+
+const {
+data,
+error
+} =
+await db.auth.getSession();
+
+
+if (error) {
+
+console.error(error);
+
+showLogin();
+
+return;
+
+}
+
+
+if (data.session) {
+
+currentUser =
+data.session.user;
+
+await loadUser();
+
+} else {
+
+showLogin();
+
+}
+
+} catch (error) {
+
+console.error(error);
+
+showLogin();
+
+}
+
+}
+
+
+db.auth.onAuthStateChange(
+async (event, session) => {
+
+if (
+event === "SIGNED_OUT"
+) {
+
+currentUser = null;
+currentProfile = null;
+
+showLogin();
+
+return;
+
+}
+
+
+if (
+session &&
+!currentUser
+) {
+
+currentUser =
+session.user;
+
+await loadUser();
+
+}
+
+}
+);
+
+
+initialize();
+
+</script>
+
+</body>
+</html>      min-height:100%;
     }
 
     body{
